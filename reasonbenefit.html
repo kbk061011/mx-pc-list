@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>REASON</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .hamburger {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      width: 30px;
+      height: 20px;
+      cursor: pointer;
+      z-index: 100;
+    }
+
+    .hamburger span {
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      background-color: #333;
+      transition: 0.3s;
+    }
+
+    .hamburger span:nth-child(1) { top: 0; }
+    .hamburger span:nth-child(2) { top: 9px; }
+    .hamburger span:nth-child(3) { top: 18px; }
+
+    .hamburger.active span:nth-child(1) {
+      transform: rotate(45deg) translate(6px, 6px);
+    }
+
+    .hamburger.active span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .hamburger.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(8px, -8px);
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -250px;
+      width: 250px;
+      height: 100%;
+      background-color: #f8f8f8;
+      transition: 0.3s;
+      z-index: 99;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+      overflow-y: auto;
+      max-height: 100vh;
+    }
+
+    .sidebar.active { left: 0; }
+
+    .sidebar ul {
+      list-style: none;
+      padding: 60px 0 0 0;
+      margin: 0;
+    }
+
+    .sidebar ul li { padding: 15px 30px; }
+
+    .sidebar ul li a {
+      color: #333;
+      text-decoration: none;
+      font-size: 1.1em;
+      display: block;
+    }
+
+    .sidebar ul li a:hover { color: #666; }
+
+    .submenu {
+      display: none;
+      padding-left: 20px;
+      margin-top: 10px;
+    }
+
+    .has-submenu.active ul.submenu {
+      display: block;
+    }
+
+    .submenu li {
+      padding: 8px 15px;
+    }
+
+    .submenu li a {
+      font-size: 0.9em;
+    }
+
+    .has-submenu > a {
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .page-title {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 36px;
+      font-weight: bold;
+      margin-bottom: 30px;
+    }
+
+    .photo-row {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      padding: 0 30px 30px 30px;
+      max-width: 1000px;
+      margin: 0 auto 40px auto;
+    }
+
+    .photo-row.ssq {
+      margin-bottom: 60px !important;
+    }
+
+    .section-title {
+      font-size: 24px;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .photo-row-images {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .album-image {
+      border-radius: 20px;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .album-image.clicked {
+      opacity: 0.1;
+      transform: scale(0.98);
+    }
+
+    .five {
+      width: calc((100% - 40px) / 5);
+      max-width: 160px;
+    }
+
+    .six {
+      width: calc((100% - 50px) / 6);
+      max-width: 140px;
+    }
+
+    .album-image {
+      width: 180px;
+      height: auto;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="hamburger" id="hamburger">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+  <nav class="sidebar" id="sidebar">
+    <ul>
+      <li><a href="index.html">HOME</a></li>
+
+      <li class="has-submenu">
+        <a>ALBUM(K)</a>
+        <ul class="submenu">
+          <li><a href="trespass.html">TRESPASS</a></li>
+          <li><a href="rush.html">RUSH</a></li>
+          <li><a href="the-clan-pt1-lost.html">THE CLAN pt.1 'LOST'</a></li>
+          <li><a href="the-clan-pt2-guilty.html">THE CLAN pt.2 'GUILTY'</a></li>
+          <li><a href="the-clan-pt25-beautiful.html">THE CLAN pt.2.5 'BEAUTIFUL'</a></li>
+          <li><a href="shine-forever.html">SHINE FOREVER</a></li>
+          <li><a href="the-code.html">THE CODE</a></li>
+          <li><a href="the-connect-dejavu.html">THE CONNECT : DEJAVU</a></li>
+          <li><a href="take1-are-you-there.html">TAKE.1 ARE YOU THERE?</a></li>
+          <li><a href="take2-we-are-here.html">TAKE.2 WE ARE HERE</a></li>
+          <li><a href="follow-find-you.html">'FOLLOW' : FIND YOU</a></li>
+          <li><a href="fantasia-x.html">FANTASIA X</a></li>
+          <li><a href="fatal-love.html">Fatal Love</a></li>
+          <li><a href="one-of-a-kind.html">One Of A Kind</a></li>
+          <li><a href="nolimit.html">NO LIMIT</a></li>
+          <li><a href="shape.html">SHAPE of LOVE</a></li>
+          <li><a href="reason.html">REASON</a></li>
+        </ul>
+      </li>
+
+      <li class="has-submenu">
+        <a>ALBUM(J)</a>
+        <ul class="submenu">
+          <li><a href="albumsj.html#album1">일본 앨범 1</a></li>
+          <li><a href="albumsj.html#album2">일본 앨범 2</a></li>
+          <li><a href="albumsj.html#album3">일본 앨범 3</a></li>
+        </ul>
+      </li>
+
+      <li class="has-submenu">
+        <a>SOLO/UNIT</a>
+        <ul class="submenu">
+          <li><a href="im.html">I.M</a></li>
+          <li><a href="kihyun.html">KIHYUN</a></li>
+          <li><a href="joohoney.html">JOOHONEY</a></li>
+          <li><a href="shownuxhyungwon.html">SHOWNU X HYUNGWON</a></li>
+        </ul>
+      </li>
+
+      <li class="has-submenu">
+        <a>CONCERT/FANMEETING</a>
+        <ul class="submenu">
+          <li><a href="concert.html#concert1">X-CLAN ORIGINS</a></li>
+          <li><a href="picnic-in-monbebe.html">PICNIC IN MONBEBE</a></li>
+          <li><a href="world-tour-beautiful.html">WORLD TOUR [BEAUTIFUL]</a></li>
+          <li><a href="camping.html">FAN CONCERT CAMPING</a></li>
+          <li><a href="world-tour-the-connect.html">WORLD TOUR [THE CONNECT]</a></li>
+      <li><a href="world-tour-the-connect-encore.html">WORLD TOUR [THE CONNECT] ENCORE</a></li>
+          <li><a href="fan-concert-the-game-mx-kingdom.html">FAN CONCERT THE GAME : MX KINGDOM</a></li>
+          <li><a href="world-tour-we-are-here.html">WORLD TOUR [WE ARE HERE]</a></li>
+          <li><a href="japan-fancon-picnic.html">JAPAN FANCON [PICNIC]</a></li>
+          <li><a href="christmas-party.html">CHRISTMAS PARTY 2019</a></li>
+          <li><a href="fan-concert-mx-home-party.html">FAN CONCERT MX HOME PARTY</a></li>
+          <li><a href="fan-concert-mx-university.html">FAN CONCERT MX UNIVERSITY</a></li>
+          <li><a href="fan-concert-mx-agent.html">FAN CONCERT MX AGENT</a></li>
+          <li><a href="tour-no-limit-us-canada.html">TOUR [NO LIMIT] (US & Canada)</a></li>
+          <li><a href="tour-no-limit-seoul.html">TOUR [NO LIMIT] IN SEOUL</a></li>
+          <li><a href="fan-concert-mx-friends.html">Fan Concert MX FRIENDS</a></li>
+          <li><a href="fan-event.html">FAN EVENT</a></li>
+          <li><a href="monsta-x-connect-x.html">MONSTA X CONNECT X</a></li>
+        </ul>
+      </li>
+
+      <li class="has-submenu">
+        <a>POP-UP STORE/MOVIE</a>
+        <ul class="submenu" style="display: none;">
+          <li><a href="11.html"">11월이 담은 순간</a></li>
+          <li><a href=" the-dreaming.html">THE DREAMING</a></li>
+          <li><a href="in-11.html">11월을 담은 순간</a></li>
+          <li><a href="on-my-way.html">ON MY WAY</a></li>
+          <li><a href="monmungchi-x.html">MONMUNGCHI X</a></li>
+          <li><a href="monologue.html">MONOLOGUE</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+
+  <h1 class="page-title">REASON</h1>
+
+  <!-- SSQ -->
+  <div class="photo-row ssq">
+    <div class="section-title">SSQ</div>
+    <div class="photo-row-images">
+      <img src="눈물혁.PNG" class="album-image six" alt="민혁">
+      <img src="반짝혁.PNG" class="album-image six" alt="기현">
+      <img src="눈물햄.PNG" class="album-image six" alt="형원">
+      <img src="반짝햄.PNG" class="album-image six" alt="주헌">
+      <img src="눈물채.PNG" class="album-image six" alt="창균">
+      <img src="반짝채.PNG" class="album-image six" alt="창균">
+      <img src="눈물쭈.PNG" class="album-image six" alt="창균">
+      <img src="반짝쭈.PNG" class="album-image six" alt="창균">
+      <img src="눈물꿍.PNG" class="album-image six" alt="창균">
+      <img src="반짝꿍.PNG" class="album-image six" alt="창균">
+
+      <!-- ver.2 -->
+        <div class="photo-row">
+          <div class="section-title">SSQ MV A ver.</div>
+          <div class="photo-row-images">
+            <img src="에이혁.PNG" class="album-image five" data-id="secret-2" alt="민혁">
+            <img src="에이햄.PNG" class="album-image five" data-id="secret-3" alt="기현">
+            <img src="에이채.PNG" class="album-image five" data-id="secret-4" alt="형원">
+            <img src="에이쭈.PNG" class="album-image five" data-id="secret-5" alt="주헌">
+            <img src="에이꿍.PNG" class="album-image five" data-id="secret-6" alt="창균">
+          </div>
+        </div>
+
+        <!-- ver.3 -->
+        <div class="photo-row">
+          <div class="section-title">SSQ MV B ver.</div>
+          <div class="photo-row-images">
+            <img src="비혁.PNG" class="album-image five" data-id="fan-2" alt="민혁">
+            <img src="비햄.PNG" class="album-image five" data-id="fan-3" alt="기현">
+            <img src="비채.PNG" class="album-image five" data-id="fan-4" alt="형원">
+            <img src="비쭈.PNG" class="album-image five" data-id="fan-5" alt="주헌">
+            <img src="비꿍.PNG" class="album-image five" data-id="fan-6" alt="창균">
+          </div>
+        </div>
+
+        <!-- ver.3 -->
+        <div class="photo-row">
+          <div class="section-title">SSQ ID PHOTO</div>
+          <div class="photo-row-images">
+            <img src="증혁.PNG" class="album-image five" data-id="fan-2" alt="민혁">
+            <img src="증햄.PNG" class="album-image five" data-id="fan-3" alt="기현">
+            <img src="증채.PNG" class="album-image five" data-id="fan-4" alt="형원">
+            <img src="증쭈.PNG" class="album-image five" data-id="fan-5" alt="주헌">
+            <img src="증꿍.PNG" class="album-image five" data-id="fan-6" alt="창균">
+          </div>
+        </div>
+
+        <!-- ver.3 -->
+        <div class="photo-row">
+          <div class="section-title">SOUNDWAVE</div>
+          <div class="photo-row-images">
+            <img src="리즌사웨혁.PNG" class="album-image five" data-id="fan-2" alt="민혁">
+            <img src="리즌사웨햄.PNG" class="album-image five" data-id="fan-3" alt="기현">
+            <img src="리즌사웨채.PNG" class="album-image five" data-id="fan-4" alt="형원">
+            <img src="리즌사웨쭈.PNG" class="album-image five" data-id="fan-5" alt="주헌">
+            <img src="리즌사웨꿍.PNG" class="album-image five" data-id="fan-6" alt="창균">
+          </div>
+        </div>
+
+        <!-- ver.4 -->
+        <div class="photo-row">
+          <div class="section-title">MYMUSICTASTE</div>
+          <div class="photo-row-images">
+            <img src="마뮤테혁.PNG" class="album-image five" data-id="polaroid-2" alt="민혁">
+            <img src="마뮤테햄.PNG" class="album-image five" data-id="polaroid-3" alt="기현">
+            <img src="마뮤테채.PNG" class="album-image five" data-id="polaroid-4" alt="형원">
+            <img src="마뮤테쭈.PNG" class="album-image five" data-id="polaroid-5" alt="주헌">
+            <img src="마뮤테꿍.PNG" class="album-image five" data-id="polaroid-6" alt="창균">
+          </div>
+        </div>
+
+ 
+        </div>
+
+          <!-- ver.4 -->
+          <div class="photo-row">
+            <div class="section-title">WITHMUU LUCKYDRAW</div>
+            <div class="photo-row-images">
+              <img src="위드럭드민혁.PNG" class="album-image five" data-id="polaroid-2" alt="민혁">
+              <img src="위드럭드기현.PNG" class="album-image five" data-id="polaroid-3" alt="기현">
+              <img src="위드럭드형원.PNG" class="album-image five" data-id="polaroid-4" alt="형원">
+              <img src="위드럭드주헌.PNG" class="album-image five" data-id="polaroid-5" alt="주헌">
+              <img src="위드럭드창균.PNG" class="album-image five" data-id="polaroid-6" alt="창균">
+              <img src="위드럭드민혁2.PNG" class="album-image five" data-id="polaroid-2" alt="민혁">
+              <img src="위드럭드기현2.PNG" class="album-image five" data-id="polaroid-3" alt="기현">
+              <img src="위드럭드형원2.PNG" class="album-image five" data-id="polaroid-4" alt="형원">
+              <img src="위드럭드주헌2.PNG" class="album-image five" data-id="polaroid-4" alt="형원">
+              <img src="위드럭드창균2.PNG" class="album-image five" data-id="polaroid-6" alt="창균">
+            </div>
+          </div>
+
+        <!-- ver.4 -->
+        <div class="photo-row">
+          <div class="section-title">WITHMUU LD BENEFIT</div>
+          <div class="photo-row-images">
+            <img src="위드럭드특전혁.PNG" class="album-image five" data-id="polaroid-2" alt="민혁">
+            <img src="위드럭드특전햄.PNG" class="album-image five" data-id="polaroid-3" alt="기현">
+            <img src="위드럭드특전채.PNG" class="album-image five" data-id="polaroid-4" alt="형원">
+            <img src="위드럭드특전쭈.PNG" class="album-image five" data-id="polaroid-5" alt="주헌">
+            <img src="위드럭드특전꿍.PNG" class="album-image five" data-id="polaroid-6" alt="창균">
+          </div>
+        </div>
+
+    <!-- ver.4 -->
+    <div class="photo-row">
+      <div class="section-title">SOUNDWAVE LD 1st (pop-up)</div>
+      <div class="photo-row-images">
+        <img src="사웨럭드댕.PNG" class="album-image five" data-id="polaroid-2" alt="민혁">
+        <img src="사웨럭드햄.PNG" class="album-image five" data-id="polaroid-2" alt="민혁">
+        <img src="사웨럭드채.PNG" class="album-image five" data-id="polaroid-4" alt="형원">
+        <img src="사웨럭드꿀.PNG" class="album-image five" data-id="polaroid-5" alt="주헌">
+        <img src="사웨럭드꿍.PNG" class="album-image five" data-id="polaroid-6" alt="창균">
+        <img src="사웨럭드댕2.PNG" class="album-image five" data-id="polaroid-2" alt="민혁">
+        <img src="사웨럭드햄2.PNG" class="album-image five" data-id="polaroid-3" alt= "기현">
+        <img src="사웨럭드채2.PNG" class="album-image five" data-id="polaroid-4" alt="형원">
+        <img src="사웨럭드꿀2.PNG" class="album-image five" data-id="polaroid-5" alt="주헌">
+        <img src="사웨럭드꿍2.PNG" class="album-image five" data-id="polaroid-6" alt="창균">
+      </div>
+    </div>
+
+    <!-- ver.4 -->
+    <div class="photo-row">
+      <div class="section-title">SOUNDWAVE LD 1st BENEFIT (pop-up)</div>
+      <div class="photo-row-images">
+        <img src="사웨럭드특전댕.PNG" class="album-image five" data-id="polaroid-2" alt="민혁">
+        <img src="사웨럭드특전햄.PNG" class="album-image five" data-id="polaroid-3" alt="기현">
+        <img src="사웨럭드특전채.PNG" class="album-image five" data-id="polaroid-4" alt="형원">
+        <img src="사웨럭드특전꿀.PNG" class="album-image five" data-id="polaroid-5" alt="주헌">
+        <img src="사웨럭드특전꿍.PNG" class="album-image five" data-id="polaroid-6" alt="창균">
+      </div>
+    </div>
+
+    <!-- ver.4 -->
+    <div class="photo-row">
+      <div class="section-title">SOUNDWAVE LD 2st (pop-up)</div>
+      <div class="photo-row-images">
+        <img src="사웨럭드2댕.PNG" class="album-image five" data-id="polaroid-2" alt="민혁">
+        <img src="사웨럭드2햄.PNG" class="album-image five" data-id="polaroid-3" alt= "기현">
+        <img src="사웨럭드2채.PNG" class="album-image five" data-id="polaroid-4" alt="형원">
+        <img src="사웨럭드2꿀.PNG" class="album-image five" data-id="polaroid-5" alt="주헌">
+        <img src="사웨럭드2꿍.PNG" class="album-image five" data-id="polaroid-6" alt="창균">
+        <img src="사웨럭드2댕2.PNG" class="album-image five" data-id="polaroid-2" alt="민혁">
+        <img src="사웨럭드2햄2.PNG" class="album-image five" data-id="polaroid-3" alt= "기현">
+        <img src="사웨럭드2채2.PNG" class="album-image five" data-id="polaroid-4" alt="형원">
+        <img src="사웨럭드2꿀2.PNG" class="album-image five" data-id="polaroid-5" alt="주헌">
+        <img src="사웨럭드2꿍2.PNG" class="album-image five" data-id="polaroid-6" alt="창균">
+      </div>
+    </div>
+
+    <!-- ver.4 -->
+    <div class="photo-row">
+      <div class="section-title">SOUNDWAVE LD 2st BENEFIT (pop-up)</div>
+      <div class="photo-row-images">
+        <img src="사웨럭드특전2댕.PNG" class="album-image five" data-id="polaroid-2" alt="민혁">
+        <img src="사웨럭드특전2햄.PNG" class="album-image five" data-id="polaroid-3" alt="기현">
+        <img src="사웨럭드특전2채.PNG" class="album-image five" data-id="polaroid-4" alt="형원">
+        <img src="사웨럭드특전2꿀.PNG" class="album-image five" data-id="polaroid-5" alt="주헌">
+        <img src="사웨럭드특전2꿍.PNG" class="album-image five" data-id="polaroid-6" alt="창균">
+      </div>
+    </div>
+
+
+
+
+
+  <script>
+    const hamburger = document.getElementById("hamburger");
+    const sidebar = document.getElementById("sidebar");
+
+    hamburger.addEventListener("click", () => {
+      hamburger.classList.toggle("active");
+      sidebar.classList.toggle("active");
+    });
+
+    document.querySelectorAll(".has-submenu > a").forEach(menu => {
+      menu.addEventListener("click", () => {
+        const parent = menu.parentElement;
+        parent.classList.toggle("active");
+      });
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const images = document.querySelectorAll(".album-image");
+      images.forEach(img => {
+        img.addEventListener("click", () => {
+          img.classList.toggle("clicked");
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>
